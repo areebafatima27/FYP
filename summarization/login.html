@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login Form</title>
+    <style>
+      body,
+      html {
+        height: 100%;
+        margin: 0;
+        font-family: Arial, sans-serif;
+      }
+      .container {
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background: linear-gradient(to bottom right, #ff6b6b, #ff59b4, #8c52ff);
+      }
+      .login-card {
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+        border-radius: 10px;
+        overflow: hidden;
+        width: 100%;
+        max-width: 350px;
+        box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+      }
+      .login-header {
+        background: #4a235a;
+        color: white;
+        padding: 20px;
+      }
+      .login-header h1 {
+        margin: 0;
+        font-size: 24px;
+      }
+      .login-header p {
+        margin: 5px 0 0;
+        font-size: 14px;
+        opacity: 0.8;
+      }
+      .login-body {
+        padding: 20px;
+      }
+      input[type="email"],
+      input[type="password"] {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 10px;
+        border: none;
+        border-radius: 5px;
+        background: rgba(255, 255, 255, 0.9);
+      }
+      .remember-forgot {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 15px;
+        font-size: 14px;
+      }
+      .remember-forgot label {
+        color: white;
+      }
+      .remember-forgot a {
+        color: white;
+        text-decoration: none;
+      }
+      .remember-forgot a:hover {
+        text-decoration: underline;
+      }
+      .login-button {
+        width: 100%;
+        padding: 10px;
+        border: none;
+        border-radius: 5px;
+        background: linear-gradient(to right, #ff8c00, #ff4500);
+        color: white;
+        font-weight: bold;
+        cursor: pointer;
+        transition: 0.3s;
+      }
+      .login-button:hover {
+        background: linear-gradient(to right, #ff4500, #ff8c00);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="login-card">
+        <div class="login-header">
+          <h1>Hello!</h1>
+          <p>Welcome to the website</p>
+        </div>
+        <div class="login-body">
+          <form>
+            <input type="email" placeholder="Email" required />
+            <input type="password" placeholder="Password" required />
+            <div class="remember-forgot">
+              <label> <input type="checkbox" /> Remember me </label>
+              <a href="#">Forgot password?</a>
+            </div>
+            <button type="submit" class="login-button">LOG IN</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

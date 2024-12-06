@@ -1,0 +1,197 @@
+1-Make file of summary.py
+
+2- install--pip install transformers torch
+
+3-Then run this code
+from transformers import pipeline
+
+# Load the Hugging Face summarization pipeline using BART model
+summarizer = pipeline("summarization", model="facebook/bart-large-cnn")
+
+# Input text for summarization (your meeting transcript or text)
+text = """
+During the meeting, John discussed the upcoming project deadlines for Q1 2025. He mentioned that the Marketing team, led by Alice, is responsible for the new ad campaign. John also emphasized that the development team needs to finish the backend integration by the end of December. Alice shared that the team is making progress, but they are facing some challenges with the design phase. The meeting also touched on upcoming product launches, with the marketing plan needing approval by the first week of January.
+"""
+
+# Generate summary (you can adjust max_length and min_length as needed)
+summary = summarizer(text, max_length=100, min_length=30, do_sample=False)
+
+# Print the summarized text
+print("Original Text: ")
+print(text)
+print("\nSummarized Text: ")
+print(summary[0]['summary_text'])
+
+4- Run the code by typing python summary.py on terminal
+
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+Summary generation code with text file 
+from transformers import pipeline
+
+# Load the Hugging Face summarization pipeline using BART model
+summarizer = pipeline("summarization", model="facebook/bart-large-cnn")
+
+# Input text for summarization (your meeting transcript or text)
+text = """
+During the meeting, John discussed the upcoming project deadlines for Q1 2025. He mentioned that the Marketing team, led by Alice, is responsible for the new ad campaign. John also emphasized that the development team needs to finish the backend integration by the end of December. Alice shared that the team is making progress, but they are facing some challenges with the design phase. The meeting also touched on upcoming product launches, with the marketing plan needing approval by the first week of January.
+"""
+
+# Generate summary (you can adjust max_length and min_length as needed)
+summary = summarizer(text, max_length=100, min_length=30, do_sample=False)
+
+# Extract the summarized text
+summary_text = summary[0]['summary_text']
+
+# Print the summarized text
+print("Original Text: ")
+print(text)
+print("\nSummarized Text: ")
+print(summary_text)
+
+# Store the summarized text in a separate file
+with open("summary.txt", "w") as file:
+    file.write(summary_text)
+
+print("\nSummary has been saved to summary.txt.")
+
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+
+summary generation using text file
+
+
+from transformers import pipeline
+
+# Load the Hugging Face summarization pipeline using BART model
+summarizer = pipeline("summarization", model="facebook/bart-large-cnn")
+
+# Read input text from a file (the meeting transcript or text)
+input_file = "meeting-transcript.txt"  # Specify the path to your text file
+with open(input_file, "r") as file:
+    text = file.read()
+
+# Generate summary (you can adjust max_length and min_length as needed)
+summary = summarizer(text, max_length=100, min_length=30, do_sample=False)
+
+# Extract the summarized text
+summary_text = summary[0]['summary_text']
+
+# Print the summarized text
+print("Original Text: ")
+print(text)
+print("\nSummarized Text: ")
+print(summary_text)
+
+# Store the summarized text in a separate file
+output_file = "summary.txt"  # Specify the path for the summary file
+with open(output_file, "w") as file:
+    file.write(summary_text)
+
+print(f"\nSummary has been saved to {output_file}.")
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+without chunks and in one go 
+
+from transformers import pipeline
+
+# Load the Hugging Face summarization pipeline using BART model
+summarizer = pipeline("summarization", model="facebook/bart-large-cnn")
+
+# Read input text from a file (the meeting transcript or text)
+input_file = "meeting_transcript.txt"  # Specify the path to your text file
+with open(input_file, "r") as file:
+    text = file.read()
+
+# Calculate the input text length (number of tokens or words)
+input_length = len(text.split())
+
+# Set dynamic max_length and min_length based on the input size
+# Increasing max_length to allow more detailed summaries
+max_length = int(input_length * 0.5)  # 50% of the original text length
+min_length = int(input_length * 0.2)  # 20% of the original text length
+
+# Ensure max_length is reasonably high to capture more details
+if max_length < 150:
+    max_length = 150  # Set a minimum max_length for detailed summaries
+
+# Generate summary with dynamic max_length and min_length
+summary = summarizer(text, max_length=max_length, min_length=min_length, do_sample=False)
+
+# Extract the summarized text
+summary_text = summary[0]['summary_text']
+
+# Print the summarized text
+print("Original Text: ")
+print(text)
+print("\nDetailed Summarized Text: ")
+print(summary_text)
+
+# Store the summarized text in a separate file
+output_file = "detailed_summary.txt"  # Specify the path for the summary file
+with open(output_file, "w") as file:
+    file.write(summary_text)
+
+print(f"\nDetailed summary has been saved to {output_file}.")
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+
+With chunks and take input from text file and storing summary to output file
+
+from transformers import pipeline
+
+# Load the summarization pipeline
+summarizer = pipeline("summarization", model="facebook/bart-large-cnn")
+
+def summarize_text(text, max_chunk_size=1024):
+    # Split text into chunks that fit within the model's max token length
+    if len(text) <= max_chunk_size:
+        print("Text is small enough to summarize directly...")
+        chunks = [text]  # No need to split
+    else:
+        print("Text is too large, splitting into chunks for summarization...")
+        chunks = [text[i:i+max_chunk_size] for i in range(0, len(text), max_chunk_size)]
+    
+    summary = []
+    for chunk in chunks:
+        # Dynamically set the max_length based on input length, ensuring it's less than the input
+        input_length = len(chunk.split())
+        max_length = min(300, max(50, int(input_length * 0.5)))  # 50% of input length or at least 50 tokens
+        
+        # Summarize each chunk
+        summarized_chunk = summarizer(chunk, max_length=max_length, min_length=50, do_sample=False)[0]['summary_text']
+        summary.append(summarized_chunk)
+    
+    # Combine all summarized chunks into one text
+    summary_text = ' '.join(summary)
+    return summary_text
+
+def read_text_from_file(input_file):
+    with open(input_file, "r", encoding="utf-8") as file:
+        text = file.read()
+    return text
+
+def save_summary_to_file(summary_text, output_file):
+    with open(output_file, "w", encoding="utf-8") as file:
+        file.write(summary_text)
+    print(f"Summary saved to {output_file}")
+
+if __name__ == "__main__":
+    input_file = "longer_text.txt"  # Replace with the path of your input text file
+    output_file = "longer_text_summary.txt"  # Replace with the desired output file name
+    
+    # Read text from the input file
+    text = read_text_from_file(input_file)
+    
+    # Summarize the text
+    summary_text = summarize_text(text)
+    
+    # Save the summarized text to the output file
+    save_summary_to_file(summary_text, output_file)
+    
+    print("Summarization complete.")
+-------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+
